@@ -1,0 +1,13 @@
+group: metamath_math
+task:
+  - metamath_maa
+  - metamath_mfb
+  - metamath_mr
+  - metamath_msv
+aggregate_metric_list:
+  - aggregation: mean
+    metric: exact_match
+    weight_by_size: true
+    filter_list: custom-extract
+metadata:
+  version: 1.0

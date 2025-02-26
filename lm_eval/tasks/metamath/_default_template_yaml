@@ -1,0 +1,5 @@
+dataset_path: meta-math/MetaMathQA-40K
+test_split: train
+description: "The following is a math problem. Think step by step and then finish your answer with \"the answer is \\boxed{{X}}\" where X is the correct letter choice.\nYour final answer will be extracted automatically by the \\boxed{{}} tag."
+doc_to_text: "Question: {{question}}\nAnswer: Let's think step by"
+doc_to_target: '{{answer.split(''The answer is: '')[-1].strip()}}'

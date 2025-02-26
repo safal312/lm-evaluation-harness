@@ -48,8 +48,7 @@ def format_cot_example(example, including_answer=True):
         {example['question']}
         Options:
         {options}
-
-        Assistant: <think>""",
+        Assistant: <think>"""
     
     return prompt
     # prompt = "Question:\n"

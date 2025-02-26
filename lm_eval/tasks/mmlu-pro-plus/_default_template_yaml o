@@ -12,9 +12,11 @@ filter_list:
   - name: "custom-extract"
     filter:
       - function: "regex"
-        regex_pattern: '<answer>.*</answer>'
-      - function: "regex"
-        regex_pattern: '\(?([ABCDEFGHIJKL])\)?'
+        regex_pattern: '<answer>(.*)</answer>'
+        function: "regex"
+        regex_pattern: '\\boxed\{([ABCDEFGHIJKL])\}'
+      # - function: "regex"
+      #   regex_pattern: '\(?([ABCDEFGHIJKL])\)?'
         # regex_pattern: r".*[aA]nswer:\s*([A-L])",
       - function: "take_first"
 generation_kwargs:
