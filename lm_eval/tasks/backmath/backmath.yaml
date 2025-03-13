@@ -1,0 +1,35 @@
+tag:
+  - math_word_problems
+task: backmath
+dataset_path: arrow
+dataset_kwargs:
+  data_files: 
+    # train: lm_eval/tasks/backmath/train.arrow
+    # validation: lm_eval/tasks/backmath/train.arrow
+    test: lm_eval/tasks/backmath/train.arrow
+
+# process_docs: !function utils.process_docs
+dataset_name: backmath
+output_type: generate_until
+# training_split: train
+# test_split: test
+test_split: test
+doc_to_text:  "Question: {{reverse_problem}}\nAnswer: Let's think step by step"
+process_results: !function utils.process_results
+doc_to_target: "{{reverse_solution}}"
+# source_question, source_answer is the normal variant
+generation_kwargs:
+  until:
+    - "Question:"
+    - "Q:"
+    - "User:"
+    - "assistant"
+  do_sample: false
+  temperature: 1.0
+metric_list:
+  # - metric: exact_match
+  - metric: math_verify
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0

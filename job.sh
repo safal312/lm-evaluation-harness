@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --job-name=open-reasoner-7b-mmlu
-#SBATCH --output=open-reasoner-%j.out
+#SBATCH --job-name=backmath
+#SBATCH --output=backmath-%j.out
 #SBATCH -p nvidia
 #SBATCH --gres=gpu:a100:1
 #Other SBATCH commands go here
@@ -12,11 +12,11 @@ source /share/apps/NYUAD/miniconda/3-4.11.0/bin/activate
 conda activate lm-eval
 
 lm_eval --model vllm \
-	--model_args pretrained=Open-Reasoner-Zero/Open-Reasoner-Zero-7B,max_gen_toks=10000 \
-	--tasks mmlu_pro_plus \
+	--model_args pretrained=Qwen/Qwen2.5-7B,max_gen_toks=4096 \
+	--tasks backmath \
 	--device cuda:0 \
 	--batch_size auto \
-	--show_config \
 	--log_samples \
 	--output_path results \
-	--wandb_args project=mmlu-pro-plus-eval,name=base-open-reasoner-7b
+	--wandb_args project=backmath,name=base-qwen \
+	# --wandb_args project=mmlu-pro-plus-eval,name=base-open-reasoner-7b

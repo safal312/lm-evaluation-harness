@@ -1,4 +1,11 @@
 from typing import Dict, List
+try:
+    from math_verify import parse, verify
+except (ModuleNotFoundError, AssertionError) as e:
+    raise type(e)(
+        "`sympy`, `math_verify` and `antlr4-python3-runtime==4.11` are required for generating translation task prompt templates. "
+        "Please install the required packages via pip install lm-eval[math] or pip install -e .[math]"
+    ) from e
 
 import datasets
 
@@ -15,19 +22,31 @@ def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
     return dataset.map(_process_doc)
 
 
-def process_results(doc: dict, results: List[str]) -> Dict[str, int]:
-    retval = 0
-    indices = [pos for pos, char in enumerate(results[0]) if char == "$"]
-    if len(indices) <= 1:
-        answer = results[0]
-    else:
-        answer = results[0][indices[0] + 1 : indices[-1]]
+# def process_results(doc: dict, results: List[str]) -> Dict[str, int]:
+#     retval = 0
+#     indices = [pos for pos, char in enumerate(results[0]) if char == "$"]
+#     if len(indices) <= 1:
+#         answer = results[0]
+#     else:
+#         answer = results[0][indices[0] + 1 : indices[-1]]
 
-    if is_equiv(answer, remove_boxed(last_boxed_only_string(doc["solution"]))):
-        retval = 1
+#     if is_equiv(answer, remove_boxed(last_boxed_only_string(doc["solution"]))):
+#         retval = 1
+
+#     results = {
+#         "exact_match": retval,
+#     }
+#     return results
+
+def process_results(doc: dict, results: List[str]) -> Dict[str, int]:
+    candidates = results[0]
+
+    # math_verify
+    res = verify(parse(doc["answer"]), parse(candidates))
+    mathval = 1 if res else 0
 
     results = {
-        "exact_match": retval,
+        "math_verify": mathval,
     }
     return results
 

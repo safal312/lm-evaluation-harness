@@ -236,6 +236,16 @@ def exact_match_fn(**kwargs):
 
 
 @register_metric(
+    metric="math_verify",
+    higher_is_better=True,
+    output_type="generate_until",
+    aggregation="mean",
+)
+def exact_match_fn(**kwargs):
+    return exact_match_hf_evaluate(**kwargs)
+
+
+@register_metric(
     metric="perplexity",
     higher_is_better=False,
     output_type="loglikelihood",

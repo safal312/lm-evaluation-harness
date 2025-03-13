@@ -1,0 +1,12 @@
+group: metamath_gsm8k
+task:
+  - metamath_gaa
+  - metamath_gfb
+  - metamath_gr
+  - metamath_gsv
+aggregate_metric_list:
+  - aggregation: mean
+    metric: math_verify
+    weight_by_size: true
+metadata:
+  version: 1.0

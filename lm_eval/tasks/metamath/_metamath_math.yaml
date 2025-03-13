@@ -6,8 +6,7 @@ task:
   - metamath_msv
 aggregate_metric_list:
   - aggregation: mean
-    metric: exact_match
+    metric: math_verify
     weight_by_size: true
-    filter_list: custom-extract
 metadata:
   version: 1.0

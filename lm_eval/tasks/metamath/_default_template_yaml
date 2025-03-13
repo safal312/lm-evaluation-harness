@@ -1,5 +1,30 @@
 dataset_path: meta-math/MetaMathQA-40K
 test_split: train
-description: "The following is a math problem. Think step by step and then finish your answer with \"the answer is \\boxed{{X}}\" where X is the correct letter choice.\nYour final answer will be extracted automatically by the \\boxed{{}} tag."
-doc_to_text: "Question: {{question}}\nAnswer: Let's think step by"
-doc_to_target: '{{answer.split(''The answer is: '')[-1].strip()}}'
+description: "A conversation between User and Assistant. The user asks a question, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think><answer> answer here </answer>."
+doc_to_text: "User: You must put your answer inside <answer> </answer> tags, i.e.,<answer> answer here </answer>. And your final answer will be extracted automatically by the \\boxed{} tag.\n{{query}}\nAssistant: <think>"
+doc_to_target: '{{response.split(''The answer is: '')[-1].strip()}}'
+process_results: !function utils.process_results
+generation_kwargs:
+  until:
+    - "</s>"
+    - "Q:"
+    - "<|im_end|>"
+    - "Question:"
+    - "User:"
+    - "math problem."
+    - "math problem:"
+    - "assistant"
+  do_sample: false
+  temperature: 1.0
+# num_fewshot: 5
+filter_list:
+  - name: "custom-extract"
+    filter:
+      - function: "regex"
+        regex_pattern: '<answer>([\s\S]*)</answer>'
+metric_list:
+  - metric: math_verify
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
